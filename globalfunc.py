@@ -11,8 +11,14 @@ import localconfig
 if platform.system() == "Windows":
         sys.path.append(localconfig.winpath)
 else:sys.path.append(localconfig.linuxpath)
-import wikipedia
-import userlib
+import pywikibot
+from pywikibot.data import api
+
+useWiki= pywikibot.Site('en','wikipedia')
+
+def callAPI(params):
+    req = api.Request(useWiki, **params)
+    return req.submit()
 
 def currentTime():
 	time = str(datetime.utcnow())
@@ -24,24 +30,38 @@ def currentTime():
 	return time
 def getEditCount(user):
         try:
-                username = userlib.User("en", user)
-                if username.editCount() == 0:
+                params = {"action": "query",
+                          "list": "users",
+                          "ususers": user,
+                          "format": "json",
+                          "usprop": "editcount",
+                          "rawcontinue":"1"}
+                result = callAPI(params)
+                editcount = result["query"]["users"][0]["editcount"]
+                if editcount == 0:
                         return False
                 else:
                         return True
         except:return None
 def checkBlocked(user):
         try:
-                username = userlib.User("en", user)
-                return username.isBlocked()
+                params = {"action": "query",
+                          "list": "users",
+                          "ususers": user,
+                          "format": "json",
+                          "usprop": "blockinfo",
+                          "rawcontinue":"1"}
+                result = callAPI(params)
+                try:
+                        block = result["query"]["users"][0]["blockid"]
+                        return True
+                except:return False
         except:return None
 def checkRegisterTime(user, maxDays,advanced):
         """Returns True if the given user is more than maxDays old, else False."""
         maxSeconds = maxDays * 24 * 60 * 60
-        site = wikipedia.getSite()
         params = {"action": "query", "list": "users", "ususers": user, "format": "json", "usprop": "registration","rawcontinue":"1"}
-        response, raw = site.postForm(site.apipath(), params)
-        result = json.loads(raw)
+        result = callAPI(params)
         try:reg = result["query"]["users"][0]["registration"]
         except:return [False,False]
         then = time.strptime(reg, "%Y-%m-%dT%H:%M:%SZ")
@@ -139,7 +159,6 @@ def checkUser(user,waittilledit,noEdit):
                         return post(user,str(slcheck[1]),str(slcheck[2]),str(waittilledit))
         return
 def main():
-        site = wikipedia.getSite()
         params = {'action': 'query',
         	'list': 'logevents',
         	'letype': 'newusers',
@@ -149,8 +168,7 @@ def main():
                 'rawcontinue':'1',
         	'format':'json'        
                 }
-        response, raw = site.postForm(site.apipath(), params)
-        result = json.loads(raw)
+        result = callAPI(params)
         reg = result["query"]["logevents"]
         postCurrentRun()
         for entry in reg:
@@ -162,7 +180,6 @@ def main():
                 if user == "":continue
                 checkUser(user, True, False)
 def runDry():
-        site = wikipedia.getSite()
         params = {'action': 'query',
         	'list': 'logevents',
         	'letype': 'newusers',
@@ -172,8 +189,7 @@ def runDry():
         	'format':'json',
                 'rawcontinue':'1'
                 }
-        response, raw = site.postForm(site.apipath(), params)
-        result = json.loads(raw)
+        result = callAPI(params)
         reg = result["query"]["logevents"]
         for entry in reg:
                 user = entry["user"]
@@ -181,9 +197,9 @@ def runDry():
                 checkUser(user, True, True)
 def post(user, match, flags, restrict):
         summary = "[[User:"+localconfig.botname+"|"+localconfig.botname+"]] "+ localconfig.primarytaskname +" - [[User:"+user+"]] ([[Special:Block/"+user+"|Block]])"
-        site = wikipedia.getSite()
+        site = pywikibot.getSite()
         pagename = localconfig.postpage
-        page = wikipedia.Page(site, pagename)
+        page = pywikibot.Page(site, pagename)
         pagetxt = page.get()
         if user in pagetxt:
                 return
@@ -218,25 +234,25 @@ def waitTillEdit(user):
                 checkUser(user, False, True)
                 return
         summary = "[[User:DeltaQuadBot|DeltaQuadBot]] Task UAA listing - Waiting for [[User:"+user+"]] ([[Special:Block/"+user+"|Block]]) to edit"
-        site = wikipedia.getSite()
+        site = pywikibot.getSite()
         pagename = localconfig.waitlist
-        page = wikipedia.Page(site, pagename)
+        page = pywikibot.Page(site, pagename)
         pagetxt = page.get()
         text = "\n*{{User|" + user+"}}"
         if text in pagetxt:
                 return
         page.put(pagetxt + text, comment=summary)
 def checkLastRun():
-        site = wikipedia.getSite()
+        site = pywikibot.getSite()
         pagename = localconfig.timepage
-        page = wikipedia.Page(site, pagename)
+        page = pywikibot.Page(site, pagename)
         time = page.get()
         return time
 def postCurrentRun():
-        site = wikipedia.getSite()
+        site = pywikibot.getSite()
         summary = localconfig.editsumtime
         pagename = localconfig.timepage
-        page = wikipedia.Page(site, pagename)
+        page = pywikibot.Page(site, pagename)
         page.put(str(currentTime()), comment=summary)
 def cutup(array):
     i=1
@@ -250,14 +266,14 @@ def cutup(array):
             return array
         return array
 def getlist(req):
-    site = wikipedia.getSite()
+    site = pywikibot.getSite()
     if req == "bl":
         pagename = localconfig.blacklist
     if req == "wl":
         pagename = localconfig.whitelist
     if req == "sl":
         pagename = localconfig.simlist
-    page = wikipedia.Page(site, pagename)
+    page = pywikibot.Page(site, pagename)
     templist = page.get()
     templist = templist.replace("{{cot|List}}\n","")
     templist = templist.replace("{{cot}}\n","")
@@ -269,9 +285,9 @@ def getlist(req):
     return templistarray
 def startAllowed(override):
         if override:return True
-        site = wikipedia.getSite()
+        site = pywikibot.getSite()
         pagename = localconfig.gopage
-        page = wikipedia.Page(site, pagename)
+        page = pywikibot.Page(site, pagename)
         start = page.get()
         if start == "Run":
                 return True
@@ -285,9 +301,9 @@ def startAllowed(override):
                 return False
 def checkWait():
         newlist=""#blank variable for later
-        site = wikipedia.getSite()
+        site = pywikibot.getSite()
         pagename = localconfig.waitlist
-        page = wikipedia.Page(site, pagename)
+        page = pywikibot.Page(site, pagename)
         waiters = page.get()
         waiters = waiters.replace("}}","")
         waiters = waiters.replace("*{{User|","")
@@ -304,9 +320,9 @@ def checkWait():
                 newlist = newlist + "\n*{{User|" + waiter + "}}"
                 #print "\n*{{User|" + waiter + "}}"
         summary = localconfig.editsumwait
-        site = wikipedia.getSite()
+        site = pywikibot.getSite()
         pagename = localconfig.waitlist
-        page = wikipedia.Page(site, pagename)
+        page = pywikibot.Page(site, pagename)
         pagetxt = page.get()
         newlist = newlist.replace("\n*{{User|}}","")
         page.put(newlist, comment=summary)
@@ -351,9 +367,9 @@ def pageCleanup():
         newlist=""#blank variable for later
         rawnewlist=""
         movelist=""
-        site = wikipedia.getSite()
+        site = pywikibot.getSite()
         pagename = localconfig.postpage
-        page = wikipedia.Page(site, pagename)
+        page = pywikibot.Page(site, pagename)
         uaapage = page.get()
         #print uaapage
         uaapage = uaapage.replace("==[[Wikipedia:UAA/BOT|Bot-reported]]==\n","")
@@ -385,16 +401,16 @@ def pageCleanup():
                 #print user
         ## UAA Bot page posting ##
         summary = localconfig.editsumclear
-        site = wikipedia.getSite()
+        site = pywikibot.getSite()
         pagename = localconfig.postpage
-        page = wikipedia.Page(site, pagename)
+        page = pywikibot.Page(site, pagename)
         pagetxt = page.get()
         newlist = "==[[Wikipedia:UAA/BOT|Bot-reported]]==\n" + newlist
         page.put(newlist, comment=summary)
         ## UAA Holding pen posting ##
-        site = wikipedia.getSite()
+        site = pywikibot.getSite()
         pagename = localconfig.holdpage
-        page = wikipedia.Page(site, pagename)
+        page = pywikibot.Page(site, pagename)
         holdpage = page.get()
         if movelist == "":return
         if time.strftime("%B") not in holdpage:
