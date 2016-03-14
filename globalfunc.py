@@ -112,9 +112,9 @@ def searchlist(line, listtype):
                                 if not wlcheck:
                                     if "LABEL" in flags:
                                         note = flags.split("LABEL(")[1].split(")")[0]
-                                        return [False, 'Used '+everyexpr.lower()+ ' instead of '+sl[i][0]+' attempting to skip filter: '+note + '. Violating string: '+blslcheck[0],blslcheck[2]]
+                                        return [False, 'Used '+everyexpr.lower()+ ' instead of '+sl[i][0]+' attempting to skip filter: '+note + '. Violating string: '+newline,blslcheck[2]]
                                     else:
-                                        return [False, 'Used '+everyexpr.lower()+ ' instead of '+sl[i][0]+' attempting to skip filter: '+blslcheck[1] + '. Violating string: '+blslcheck[0],blslcheck[2]]
+                                        return [False, 'Used '+everyexpr.lower()+ ' instead of '+sl[i][0]+' attempting to skip filter: '+blslcheck[1] + '. Violating string: '+newline,blslcheck[2]]
                                 else:
                                         return [True, None, None]
             i = i+1
