@@ -146,7 +146,9 @@ def checkUser(user,waittilledit,noEdit):
                 if noEdit:
                         #print 'No edit - 1' + str(bltest[1]) +" "+ str(bltest[2])
                         return 
-                else:return post(user,str(bltest[1]),str(bltest[2]),str(waittilledit))
+                else:
+                        try:return post(user,str(bltest[1]),str(bltest[2]),str(waittilledit))
+                        except:return
         if "NO_SIM_MATCH" in flags:return
         slcheck = searchlist(user, "sl")
         if slcheck == True:a=1

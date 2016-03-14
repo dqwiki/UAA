@@ -7,7 +7,6 @@ if platform.system() == "Windows":
 else:
         sys.path.append(localconfig.linuxpath)
         print "You are running DeltaQuadBot UAA Module for Linux."
-import wikipedia
 import globalfunc as globe
 override = False
 if not globe.startAllowed(override):
@@ -17,4 +16,3 @@ if not globe.startAllowed(override):
 globe.main()
 globe.checkWait()
 globe.pageCleanup()
-wikipedia.stopme()
