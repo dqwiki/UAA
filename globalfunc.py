@@ -106,11 +106,17 @@ def searchlist(line, listtype):
                         if re.search(".", everyexpr.lower()) != None:
                             newline = line.lower().replace(everyexpr.lower(), sl[i].lower().split(":")[0])
                             blslcheck = searchlist(newline.lower(), "bl")
+                            flags = blslcheck[2]
                             if blslcheck[0] and re.search(".", everyexpr) != None:
                                 wlcheck = searchlist(newline, "wl")
                                 if not wlcheck:
-                                    return [False, 'Used '+everyexpr.lower()+ ' instead of '+sl[i][0]+' attempting to skip filter: '+blslcheck[1],blslcheck[2]]
-                                else:return [True, None, None]
+                                    if "LABEL" in flags:
+                                        note = flags.split("LABEL(")[1].split(")")[0]
+                                        return [False, 'Used '+everyexpr.lower()+ ' instead of '+sl[i][0]+' attempting to skip filter: '+note,blslcheck[2]]
+                                    else:
+                                        return [False, 'Used '+everyexpr.lower()+ ' instead of '+sl[i][0]+' attempting to skip filter: '+blslcheck[1],blslcheck[2]]
+                                else:
+                                        return [True, None, None]
             i = i+1
         matchnum = 0
         for eachline in sl:
@@ -215,6 +221,7 @@ def post(user, match, flags, restrict):
                         return#leave this indented, or it will not continue to report edited users
         if "LABEL" in flags:
                 note = flags.split("LABEL(")[1].split(")")[0]
+                if "skip" in match: note = match
                 text = text + "*:Matched: " + note + " ~~~~\n"
         else:
                 text = text + "*:Matched: " + match + " ~~~~\n"

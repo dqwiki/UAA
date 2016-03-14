@@ -2,7 +2,7 @@
 botname = "DeltaQuadBot"
 
 ##Default System Path
-winpath = "C:\\pywikipedia\\"#Windows path for pywikipedia, need "\\" for folder switch
+winpath = "C:\\pywikipedia\\core\\"#Windows path for pywikipedia, need "\\" for folder switch
 linuxpath = "/data/project/deltaquad-bots/pywikipedia/core"
 
 #Onwiki paths
