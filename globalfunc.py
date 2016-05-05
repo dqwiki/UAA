@@ -381,6 +381,9 @@ def pageCleanup():
         page = pywikibot.Page(site, pagename)
         uaapage = page.get()
         #print uaapage
+        if "{{adminbacklog" in uaapage:
+                adminbacklog=True
+                uaapage.replace("{{adminbacklog}}\n","")
         uaapage = uaapage.replace("==[[Wikipedia:UAA/BOT|Bot-reported]]==\n","")
         usergrid = uaapage.split("*{{user-uaa|1=")
         for cell in usergrid:
@@ -417,7 +420,8 @@ def pageCleanup():
         pagename = localconfig.postpage
         page = pywikibot.Page(site, pagename)
         pagetxt = page.get()
-        newlist = "==[[Wikipedia:UAA/BOT|Bot-reported]]==\n" + newlist
+        if adminbacklog:newlist+"{{adminbacklog}}\n"
+        newlist += "==[[Wikipedia:UAA/BOT|Bot-reported]]==\n" + newlist
         page.put(newlist, comment=summary)
         ## UAA Holding pen posting ##
         site = pywikibot.getSite()
