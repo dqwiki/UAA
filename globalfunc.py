@@ -384,30 +384,33 @@ def pageCleanup():
         uaapage = uaapage.replace("==[[Wikipedia:UAA/BOT|Bot-reported]]==\n","")
         usergrid = uaapage.split("*{{user-uaa|1=")
         for cell in usergrid:
-                declined = False
-                if cell == "":continue
-                user = cell.split("}}")[0]
-                if checkBlocked(user):continue#If user is blocked, skip putting them back on the list.
-                if checkRegisterTime(user, 14,False):continue#Requests over 14 days are removed for inaction
-                if user in newlist:continue
-                for entry in resolvedDatabase:
-                        if re.search(entry.lower(), cell.lower()) == None:
-                                continue
-                        else:
-                                movelist = movelist + "*{{user-uaa|1=" + ''.join(cell)
-                                declined = True
-                                break
-                if declined:continue
-                for entry in declinedDatabase:
-                        if re.search(entry.lower(), cell.lower()) == None:
-                                continue
-                        else:
-                                declined = True
-                                break
-                if declined:continue
-                rawnewlist = rawnewlist + "\n" + user
-                newlist = newlist + "*{{user-uaa|1=" + ''.join(cell)
-                #print user
+                try:
+                        declined = False
+                        if cell == "":continue
+                        user = cell.split("}}")[0]
+                        if "{{" in user:continue#Admin backlog template
+                        if checkBlocked(user):continue#If user is blocked, skip putting them back on the list.
+                        if checkRegisterTime(user, 14,False):continue#Requests over 14 days are removed for inaction
+                        if user in newlist:continue
+                        for entry in resolvedDatabase:
+                                if re.search(entry.lower(), cell.lower()) == None:
+                                        continue
+                                else:
+                                        movelist = movelist + "*{{user-uaa|1=" + ''.join(cell)
+                                        declined = True
+                                        break
+                        if declined:continue
+                        for entry in declinedDatabase:
+                                if re.search(entry.lower(), cell.lower()) == None:
+                                        continue
+                                else:
+                                        declined = True
+                                        break
+                        if declined:continue
+                        rawnewlist = rawnewlist + "\n" + user
+                        newlist = newlist + "*{{user-uaa|1=" + ''.join(cell)
+                        #print user
+                except:continue
         ## UAA Bot page posting ##
         summary = localconfig.editsumclear
         site = pywikibot.getSite()
