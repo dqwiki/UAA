@@ -384,6 +384,7 @@ def pageCleanup():
         if "{{adminbacklog" in uaapage:
                 adminbacklog=True
                 uaapage.replace("{{adminbacklog}}\n","")
+        else:adminbacklog=False
         uaapage = uaapage.replace("==[[Wikipedia:UAA/BOT|Bot-reported]]==\n","")
         usergrid = uaapage.split("*{{user-uaa|1=")
         for cell in usergrid:
