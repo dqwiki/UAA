@@ -422,7 +422,7 @@ def pageCleanup():
         page = pywikibot.Page(site, pagename)
         pagetxt = page.get()
         if adminbacklog:newlist+"{{adminbacklog}}\n"
-        newlist += "==[[Wikipedia:UAA/BOT|Bot-reported]]==\n" + newlist
+        newlist = "==[[Wikipedia:UAA/BOT|Bot-reported]]==\n" + newlist
         page.put(newlist, comment=summary)
         ## UAA Holding pen posting ##
         site = pywikibot.getSite()
