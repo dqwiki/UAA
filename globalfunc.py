@@ -430,9 +430,9 @@ def pageCleanup():
         page = pywikibot.Page(site, pagename)
         holdpage = page.get()
         if movelist == "":return
-        if time.strftime("%B") not in holdpage:
+        if "==" + time.strftime("%B") + "==" not in holdpage:
                 holdpage = holdpage + "\n==" + time.strftime("%B") + "=="
-        if time.strftime("%d") not in holdpage.split(time.strftime("%B"))[1]:  # or time.strftime("%d").split("0")[1] not in holdpage.split(time.strftime("%B"))[1]:
+        if "===" + time.strftime("%d") + "===" not in holdpage.split("=="+time.strftime("%B")+"==")[1]:  # or time.strftime("%d").split("0")[1] not in holdpage.split(time.strftime("%B"))[1]:
                 holdpage = holdpage + "\n===" + time.strftime("%d") + "===\n"
         holdpage = holdpage + "\n" + movelist
         page.put(holdpage, comment=summary)
