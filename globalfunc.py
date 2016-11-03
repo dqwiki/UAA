@@ -371,7 +371,9 @@ def pageCleanup():
                             "{{UAA\|coi}}",
                             "{{UAA\|coin}}",
                             "{{UAA\|r}}",
-                            "{{UAA\|rfcn}}"
+                            "{{UAA\|rfcn}}",
+			    "{{UAA\|fp}}",
+			    "{{UAA\|false}}"
                             ]
         newlist = ""  # blank variable for later
         rawnewlist = ""
