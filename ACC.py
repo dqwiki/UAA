@@ -54,4 +54,4 @@ result=cur.fetchall()
 db.close()
 
 for request in result:
-    print globe.checkuser(request[USERNAME])
+    print globe.checkuser(request[USERNAME],False,True)

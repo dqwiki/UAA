@@ -143,7 +143,7 @@ def searchlist(line, listtype):
                         if entry in line:
                                 if not re.search('[a-z]|[A-Z]|[0-9]', entry) == None:continue
                                 matchnum = matchnum + 1
-        if matchnum > 1:return [False, 'Attempting to skip filters using multiple similiar charecters', 'LOW_CONFIDENCE,NOTE(Multiple characters like ν and ә can be contained in the same phrase, this rule detects when one or more occurs)']
+        if matchnum > 1:return [False, 'Attempting to skip filters using multiple similiar charecters', 'LOW_CONFIDENCE,NOTE(Multiple special characters can be contained in the same phrase, this rule detects when one or more occurs)']
         return True
 def checkUser(user, waittilledit, noEdit):
         bltest = searchlist(user, "bl")
