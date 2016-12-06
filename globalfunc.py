@@ -100,30 +100,28 @@ def searchlist(line, listtype):
     try:line = line.decode("utf-8")
     except:noNeedToTryAndPlayWithEncoding = True  # not a real var
     if line == "":return
-    if listtype == "bl":
+    if listtype == "bl": #invoke blacklist
         i = 0
-        while i < len(bl):
-            if bl[i].lower().split(":")[0] != "":check = re.search(bl[i].lower().split(":")[0], line.lower())
+        for lineinbl in bl:
+            if lineinbl.lower().split(":")[0] != "":check = re.search(lineinbl.lower().split(":")[0], line.lower())
             else: check = None
             if not (check == "None" or check == None):
-                return [True, bl[i].split(":")[0], ' '.join(bl[i].split(":")[1:])]
-            i = i + 1
+                return [True, lineinbl.split(":")[0], ' '.join(lineinbl.split(":")[1:])]
         return [False, None, None]
-    if listtype == "wl":
+    if listtype == "wl":#invoke whitelist
         for entry in wl:
             if entry.lower() in line.lower():
                 return True
         return False
-    if listtype == "sl":
-        i = 0
-        while i < len(sl):  # can be omptimized with for statement
-            if re.search(".", sl[i]) != None:
-                stringline = sl[i].split(":")[1]
+    if listtype == "sl": #invoke similiar list
+        for lineinsl in sl:
+            if re.search(".", lineinsl) != None:
+                stringline = lineinsl.split(":")[1]
                 stringline = stringline.split(" ")
                 for everyexpr in stringline:
                     if everyexpr in line:
                         if re.search(".", everyexpr.lower()) != None:
-                            newline = line.lower().replace(everyexpr.lower(), sl[i].lower().split(":")[0])
+                            newline = line.lower().replace(everyexpr.lower(), lineinsl.lower().split(":")[0])
                             blslcheck = searchlist(newline.lower(), "bl")
                             flags = blslcheck[2]
                             if blslcheck[0] and re.search(".", everyexpr) != None:
@@ -131,12 +129,11 @@ def searchlist(line, listtype):
                                 if not wlcheck:
                                     if "LABEL" in flags:
                                         note = flags.split("LABEL(")[1].split(")")[0]
-                                        return [False, 'Used ' + everyexpr.lower() + ' instead of ' + sl[i].split(":")[0] + ' attempting to skip filter: ' + note + '. Violating string: ' + newline, blslcheck[2]]
+                                        return [False, 'Used ' + everyexpr.lower() + ' instead of ' + lineinsl.split(":")[0] + ' attempting to skip filter: ' + note + '. Violating string: ' + newline, blslcheck[2]]
                                     else:
-                                        return [False, 'Used ' + everyexpr.lower() + ' instead of ' + sl[i].split(":")[0] + ' attempting to skip filter: ' + blslcheck[1] + '. Violating string: ' + newline, blslcheck[2]]
+                                        return [False, 'Used ' + everyexpr.lower() + ' instead of ' + lineinsl.split(":")[0] + ' attempting to skip filter: ' + blslcheck[1] + '. Violating string: ' + newline, blslcheck[2]]
                                 else:
                                         return [True, None, None]
-            i = i + 1
         matchnum = 0
         for eachline in sl:
                 if eachline == "":continue
