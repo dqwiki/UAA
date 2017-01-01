@@ -263,7 +263,7 @@ def waitTillEdit(user):
         pagename = localconfig.waitlist
         page = pywikibot.Page(site, pagename)
         pagetxt = page.get()
-        text = "\n*{{User|" + user + "}}"
+        text = "\n*{{User|1=" + user + "}}"
         if text in pagetxt:
                 return
         page.put(pagetxt + text, comment=summary)
@@ -331,7 +331,7 @@ def checkWait():
         page = pywikibot.Page(site, pagename)
         waiters = page.get()
         waiters = waiters.replace("}}", "")
-        waiters = waiters.replace("*{{User|", "")
+        waiters = waiters.replace("*{{User|1=", "")
         waiters = waiters.split("\n")
         for waiter in waiters:
                 if waiter == "":continue  # Non-existant user
@@ -342,14 +342,14 @@ def checkWait():
                         continue
                 if waiter in newlist:continue  # If user already in the list, in case duplicates run over
                 # Continue if none of the other checks have issues with the conditions for staying on the waitlist
-                newlist = newlist + "\n*{{User|" + waiter + "}}"
+                newlist = newlist + "\n*{{User|1=" + waiter + "}}"
                 # print "\n*{{User|" + waiter + "}}"
         summary = localconfig.editsumwait
         site = pywikibot.getSite()
         pagename = localconfig.waitlist
         page = pywikibot.Page(site, pagename)
         pagetxt = page.get()
-        newlist = newlist.replace("\n*{{User|}}", "")
+        newlist = newlist.replace("\n*{{User|1=}}", "")
         newlist = "<noinclude>__NOINDEX__</noinclude>\n" + newlist
         page.put(newlist, comment=summary)
 def pageCleanup():
