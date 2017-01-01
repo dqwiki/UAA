@@ -350,7 +350,7 @@ def checkWait():
         page = pywikibot.Page(site, pagename)
         pagetxt = page.get()
         newlist = newlist.replace("\n*{{User|1=}}", "")
-        newlist = "<noinclude>__NOINDEX__</noinclude>\n" + newlist
+        newlist = "<noinclude>__NOINDEX__</noinclude>" + newlist
         page.put(newlist, comment=summary)
 def pageCleanup():
         resolvedDatabase = ["{{UAA\|w}}",
