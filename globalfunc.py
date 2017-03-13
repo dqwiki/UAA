@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 (C) 2016 DeltaQuad (enwp.org/User:DeltaQuad)
 
@@ -17,7 +19,6 @@ You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
 along with DeltaQuadBot. If not, see <https://www.gnu.org/licenses/agpl.txt>.
 """
 
-# -*- coding: utf-8 -*-
 from datetime import datetime
 import sys
 import platform
@@ -135,15 +136,20 @@ def searchlist(line, listtype):
                                 else:
                                         return [True, None, None]
         matchnum = 0
+        matchon = []
         for eachline in sl:
                 if eachline == "":continue
                 splitline = eachline.split(": ")[1]
                 splitline = splitline.split(" ")
                 for entry in splitline:                        
                         if entry in line:
+                                if entry == "":continue
+                                if entry in matchon:
+                                        continue
                                 if not re.search('[a-z]|[A-Z]|[0-9]', entry) == None:continue
                                 matchnum = matchnum + 1
-        if matchnum > 1:return [False, 'Attempting to skip filters using multiple similiar charecters', 'LOW_CONFIDENCE,NOTE(Multiple special characters can be contained in the same phrase, this rule detects when one or more occurs)']
+                                matchon += [entry]
+        if matchnum > 2:return [False, 'Attempting to skip filters using multiple similiar charecters', 'LOW_CONFIDENCE,NOTE(Multiple special characters can be contained in the same phrase, this rule detects when one or more occurs.']
         return True
 def checkUser(user, waittilledit, noEdit):
         bltest = searchlist(user, "bl")
@@ -160,7 +166,7 @@ def checkUser(user, waittilledit, noEdit):
                 return
         if bltest[0]:
                 if noEdit:
-                        # print 'No edit - 1' + str(bltest[1]) +" "+ str(bltest[2])
+                        print 'No edit - 1' + str(bltest[1]) +" "+ str(bltest[2])
                         return 
                 else:
                         try:return post(user, str(bltest[1]), str(bltest[2]), str(waittilledit))
@@ -172,13 +178,13 @@ def checkUser(user, waittilledit, noEdit):
         try:
                 if not slcheck[0] and not bltest[0]:
                         if noEdit:
-                                # print "No edit - 2 "+str(slcheck[1]) +" "+ str(slcheck[2])
+                                print "No edit - 2 "+str(slcheck[1]) +" "+ str(slcheck[2])
                                 return
                         return post(user, str(slcheck[1]), str(slcheck[2]), str(waittilledit))
         except:
                 if not slcheck and not bltest[0]:
                         if noEdit:
-                                # print "No edit - 3"+str(slcheck[1]) +" "+ str(slcheck[2])
+                                print "No edit - 3"+str(slcheck[1]) +" "+ str(slcheck[2])
                                 return
                         return post(user, str(slcheck[1]), str(slcheck[2]), str(waittilledit))
         return
