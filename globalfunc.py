@@ -28,17 +28,15 @@ import re
 import traceback
 
 import localconfig
-if platform.system() == "Windows":
-        sys.path.append(localconfig.winpath)
-else:sys.path.append(localconfig.linuxpath)
-import pywikibot
-from pywikibot.data import api
+import mwclient
+import login
 
-useWiki = pywikibot.Site('en', 'wikipedia')
+masterwiki =  mwclient.Site('en.wikipedia.org')
+masterwiki.login(login.username,login.password)
+
 
 def callAPI(params):
-    req = api.Request(useWiki, **params)
-    return req.submit()
+    return masterwiki.api(**params)
 
 def currentTime():
 	time = str(datetime.utcnow())
@@ -227,10 +225,8 @@ def runDry():
                 checkUser(user, True, True)
 def post(user, match, flags, restrict):
         summary = "[[User:" + localconfig.botname + "|" + localconfig.botname + "]] " + localconfig.primarytaskname + " - [[User:" + user + "]] ([[Special:Block/" + user + "|Block]])"
-        site = pywikibot.getSite()
-        pagename = localconfig.postpage
-        page = pywikibot.Page(site, pagename)
-        pagetxt = page.get()
+        page = masterwiki.pages[localconfig.postpage]
+        pagetxt = page.text()
         if user in pagetxt:
                 return
         text = "\n\n*{{user-uaa|1=" + user + "}}\n"
@@ -265,26 +261,20 @@ def waitTillEdit(user):
                 checkUser(user, False, True)
                 return
         summary = "[[User:DeltaQuadBot|DeltaQuadBot]] Task UAA listing - Waiting for [[User:" + user + "]] ([[Special:Block/" + user + "|Block]]) to edit"
-        site = pywikibot.getSite()
-        pagename = localconfig.waitlist
-        page = pywikibot.Page(site, pagename)
-        pagetxt = page.get()
+        page = masterwiki.pages[localconfig.waitlist]
+        pagetxt = page.text()
         text = "\n*{{User|1=" + user + "}}"
         if text in pagetxt:
                 return
-        page.put(pagetxt + text, comment=summary)
+        page.save(pagetxt + text, comment=summary)
 def checkLastRun():
-        site = pywikibot.getSite()
-        pagename = localconfig.timepage
-        page = pywikibot.Page(site, pagename)
-        time = page.get()
+        page = masterwiki.pages[localconfig.timepage]
+        time = page.text()
         return time
 def postCurrentRun():
-        site = pywikibot.getSite()
         summary = localconfig.editsumtime
-        pagename = localconfig.timepage
-        page = pywikibot.Page(site, pagename)
-        page.put(str(currentTime()), comment=summary)
+        page = masterwiki.pages[localconfig.timepage]
+        page.save(str(currentTime()), summary)
 def cutup(array):
     i = 1
     while i < len(array) - 1:
@@ -297,15 +287,14 @@ def cutup(array):
             return array
         return array
 def getlist(req):
-    site = pywikibot.getSite()
     if req == "bl":
         pagename = localconfig.blacklist
     if req == "wl":
         pagename = localconfig.whitelist
     if req == "sl":
         pagename = localconfig.simlist
-    page = pywikibot.Page(site, pagename)
-    templist = page.get()
+    page = masterwiki.pages[pagename]
+    templist = page.text()
     templist = templist.replace("{{cot|List}}\n", "")
     templist = templist.replace("{{cot}}\n", "")
     templist = templist.replace("{{cob}}", "")
@@ -316,10 +305,8 @@ def getlist(req):
     return templistarray
 def startAllowed(override):
         if override:return True
-        site = pywikibot.getSite()
-        pagename = localconfig.gopage
-        page = pywikibot.Page(site, pagename)
-        start = page.get()
+        page = masterwiki.pages[localconfig.gopage]
+        start = page.text()
         if start == "Run":
                 return True
         if start == "Dry run":
@@ -332,10 +319,8 @@ def startAllowed(override):
                 return False
 def checkWait():
         newlist = ""  # blank variable for later
-        site = pywikibot.getSite()
-        pagename = localconfig.waitlist
-        page = pywikibot.Page(site, pagename)
-        waiters = page.get()
+        page = masterwiki.pages[localconfig.waitlist]
+        waiters = page.text()
         waiters = waiters.replace("}}", "")
         waiters = waiters.replace("*{{User|1=", "")
         waiters = waiters.split("\n")
@@ -351,13 +336,11 @@ def checkWait():
                 newlist = newlist + "\n*{{User|1=" + waiter + "}}"
                 # print "\n*{{User|" + waiter + "}}"
         summary = localconfig.editsumwait
-        site = pywikibot.getSite()
-        pagename = localconfig.waitlist
-        page = pywikibot.Page(site, pagename)
-        pagetxt = page.get()
+        page = masterwiki.pages[localconfig.waitlist]
+        pagetxt = page.text()
         newlist = newlist.replace("\n*{{User|1=}}", "")
         newlist = "<noinclude>__NOINDEX__</noinclude>" + newlist
-        page.put(newlist, comment=summary)
+        page.save(newlist, summary)
 def pageCleanup():
         resolvedDatabase = ["{{UAA\|w}}",
                             "{{UAA\|wt}}",
@@ -401,10 +384,8 @@ def pageCleanup():
         newlist = ""  # blank variable for later
         rawnewlist = ""
         movelist = ""
-        site = pywikibot.getSite()
-        pagename = localconfig.postpage
-        page = pywikibot.Page(site, pagename)
-        uaapage = page.get()
+        page = masterwiki.pages[localconfig.postpage]
+        uaapage = page.text()
         # print uaapage
         if "{{adminbacklog" in uaapage:
                 adminbacklog = True
@@ -442,29 +423,25 @@ def pageCleanup():
                 except:continue
         # # UAA Bot page posting ##
         summary = localconfig.editsumclear
-        site = pywikibot.getSite()
-        pagename = localconfig.postpage
-        page = pywikibot.Page(site, pagename)
-        pagetxt = page.get()
+        page = masterwiki.pages[localconfig.postpage]
+        pagetxt = page.text()
 	newlist = "__NOINDEX__</noinclude>\n" + "==[[Wikipedia:UAA/BOT|Bot-reported]]==\n" + newlist
 	if adminbacklog:newlist = "{{adminbacklog}}<!-- v2.0.27 RemoveBlocked=Off MergeDuplicates=On AutoMark=On FixInstructions=Off AutoBacklog=On AddLimit=8 RemoveLimit=4 -->\n" + newlist
 	else:newlist = "{{noadminbacklog}}<!-- v2.0.27 RemoveBlocked=Off MergeDuplicates=On AutoMark=On FixInstructions=Off AutoBacklog=On AddLimit=8 RemoveLimit=4 -->\n" + newlist
         headerone = "<noinclude>{{pp-move-indef}}\n"
 	headertwo = """{{Wikipedia:Usernames for administrator attention/Navigation}}\n{{Shortcut|WP:UAA/BOT|WP:UFAA/BOT|WP:UFA/BOT|WP:AIVU/BOT|WP:UAA/B}}\n"""
 	newlist = headerone+headertwo+newlist
-        page.put(newlist, comment=summary)
+        page.save(newlist, summary)
         # # UAA Holding pen posting ##
-        site = pywikibot.getSite()
-        pagename = localconfig.holdpage
-        page = pywikibot.Page(site, pagename)
-        holdpage = page.get()
+        page = masterwiki.pages[localconfig.holdpage]
+        holdpage = page.text()
         if movelist == "":return
         if "==" + time.strftime("%B") + "==" not in holdpage:
                 holdpage = holdpage + "\n==" + time.strftime("%B") + "=="
         if "===" + time.strftime("%d") + "===" not in holdpage.split("=="+time.strftime("%B")+"==")[1]:  # or time.strftime("%d").split("0")[1] not in holdpage.split(time.strftime("%B"))[1]:
                 holdpage = holdpage + "\n===" + time.strftime("%d") + "===\n"
         holdpage = holdpage + "\n" + movelist
-        page.put(holdpage, comment=summary)
+        page.save(holdpage, summary)
         return
 global bl
 bl = getlist("bl")

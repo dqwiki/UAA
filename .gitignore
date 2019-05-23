@@ -49,3 +49,4 @@ Temporary Items
 *.prefs
 .project
 *.pydevproject
+login.py
