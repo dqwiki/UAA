@@ -242,9 +242,9 @@ def post(user, match, flags, restrict):
         if "LABEL" in flags:
                 note = flags.split("LABEL(")[1].split(")")[0]
                 if "skip" in match: note = match
-                text = text + "*:{{Matched|1=" + note + "}} ~~~~\n"
+                text = text + "*:{{Matched|1=" + note.replace("|","{{!}}") + "}} ~~~~\n"
         else:
-                text = text + "*:{{Matched|1=" + match + "}} ~~~~\n"
+                text = text + "*:{{Matched|1=" + match.replace("|","{{!}}") + "}} ~~~~\n"
         if "NOTE" in flags:
                 note = flags.split("NOTE(")[1].split(")")[0]
                 text = text + "*:{{takenote|Note on file}} " + note + " ~~~~\n"
