@@ -252,7 +252,7 @@ def post(user, match, flags, restrict):
                 sock = flags.split("SOCK_PUPPET(")[1].split(")")[0]
                 text = text + "*:{{clerknote}} Consider reporting to [[WP:SPI]] as [[User:%s]]. ~~~~\n" % sock
         if restrict == False:text + "*:{{done|Waited until user edited to post.}} ~~~~\n"
-        if not checkBlocked(user):page.put(pagetxt + text, comment=summary)
+        if not checkBlocked(user):page.save(pagetxt + text, summary)
 def waitTillEdit(user):
         registertime = checkRegisterTime(user, 7, True)
         if not registertime[1]:
@@ -406,7 +406,6 @@ def pageCleanup():
                                 if re.search(entry.lower(), cell.lower()) == None:
                                         continue
                                 else:
-                                        movelist = movelist + "*{{user-uaa|1=" + ''.join(cell)
                                         declined = True
                                         break
                         if declined:continue
@@ -432,16 +431,6 @@ def pageCleanup():
 	headertwo = """{{Wikipedia:Usernames for administrator attention/Navigation}}\n{{Shortcut|WP:UAA/BOT|WP:UFAA/BOT|WP:UFA/BOT|WP:AIVU/BOT|WP:UAA/B}}\n"""
 	newlist = headerone+headertwo+newlist
         page.save(newlist, summary)
-        # # UAA Holding pen posting ##
-        page = masterwiki.pages[localconfig.holdpage]
-        holdpage = page.text()
-        if movelist == "":return
-        if "==" + time.strftime("%B") + "==" not in holdpage:
-                holdpage = holdpage + "\n==" + time.strftime("%B") + "=="
-        if "===" + time.strftime("%d") + "===" not in holdpage.split("=="+time.strftime("%B")+"==")[1]:  # or time.strftime("%d").split("0")[1] not in holdpage.split(time.strftime("%B"))[1]:
-                holdpage = holdpage + "\n===" + time.strftime("%d") + "===\n"
-        holdpage = holdpage + "\n" + movelist
-        page.save(holdpage, summary)
         return
 global bl
 bl = getlist("bl")
