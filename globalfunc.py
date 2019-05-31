@@ -231,7 +231,7 @@ def post(user, match, flags, restrict):
                 return
         text = "\n\n*{{user-uaa|1=" + user + "}}\n"
         if "LOW_CONFIDENCE" in flags:
-                text = text + "*:{{clerknote}} There is low confidence in this filter test, please be careful in blocking. ~~~~\n"
+                text = text + "*:{{Low confidence}} ~~~~\n"
         # "WAIT_TILL_EDIT" in flags and restrict != False:#If waittilledit override it not active, aka first run
         edited = getEditCount(user)
         if edited == None:
@@ -242,16 +242,12 @@ def post(user, match, flags, restrict):
         if "LABEL" in flags:
                 note = flags.split("LABEL(")[1].split(")")[0]
                 if "skip" in match: note = match
-                text = text + "*:Matched: " + note + " ~~~~\n"
+                text = text + "*:{{Matched|1=" + note + "}} ~~~~\n"
         else:
-                text = text + "*:Matched: " + match + " ~~~~\n"
+                text = text + "*:{{Matched|1=" + match + "}} ~~~~\n"
         if "NOTE" in flags:
                 note = flags.split("NOTE(")[1].split(")")[0]
-                text = text + "*:{{clerknote}} " + note + " ~~~~\n"
-        if "SOCK_PUPPET" in flags:
-                sock = flags.split("SOCK_PUPPET(")[1].split(")")[0]
-                text = text + "*:{{clerknote}} Consider reporting to [[WP:SPI]] as [[User:%s]]. ~~~~\n" % sock
-        if restrict == False:text + "*:{{done|Waited until user edited to post.}} ~~~~\n"
+                text = text + "*:{{takenote|Note on file}} " + note + " ~~~~\n"
         if not checkBlocked(user):page.save(pagetxt + text, summary)
 def waitTillEdit(user):
         registertime = checkRegisterTime(user, 7, True)
