@@ -338,7 +338,7 @@ def checkWait():
         newlist = "<noinclude>__NOINDEX__</noinclude>" + newlist
         page.save(newlist, summary)
 def pageCleanup():
-        resolvedDatabase = ["{{UAA\|w}}",
+        declinedDatabase = ["{{UAA\|w}}",
                             "{{UAA\|wt}}",
                             "{{UAA\|wait}}",
                             "{{UAA\|m}}",
@@ -353,8 +353,7 @@ def pageCleanup():
                             "{{UAA\|request}}",
                             "{{UAA\|rc}}",
                             "{{UAA\|rcu}}"
-                            ]
-        declinedDatabase = ["{{UAA\|a}}",
+                            "{{UAA\|a}}",
                             "{{UAA\|afc}}",
                             "{{UAA\|s}}",
                             "{{UAA\|st}}",
@@ -379,7 +378,6 @@ def pageCleanup():
                             ]
         newlist = ""  # blank variable for later
         rawnewlist = ""
-        movelist = ""
         page = masterwiki.pages[localconfig.postpage]
         uaapage = page.text()
         # print uaapage
@@ -398,13 +396,6 @@ def pageCleanup():
                         if checkBlocked(user):continue  # If user is blocked, skip putting them back on the list.
                         if checkRegisterTime(user, 14, False):continue  # Requests over 14 days are removed for inaction
                         if user in newlist:continue
-                        for entry in resolvedDatabase:
-                                if re.search(entry.lower(), cell.lower()) == None:
-                                        continue
-                                else:
-                                        declined = True
-                                        break
-                        if declined:continue
                         for entry in declinedDatabase:
                                 if re.search(entry.lower(), cell.lower()) == None:
                                         continue
