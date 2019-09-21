@@ -322,14 +322,20 @@ def checkWait():
         waiters = waiters.replace("*{{User|1=", "")
         waiters = waiters.split("\n")
         for waiter in waiters:
+                if "noinclude" in waiter:continue
                 try:print "Checking " + waiter
                 except:print "Checking non-ASCII user"
                 if waiter == "":continue  # Non-existant user
+                print "-Checking when registertime"
                 if checkRegisterTime(waiter, 7, False):continue
+                print "-Checking blocked"
                 if checkBlocked(waiter):continue  # If user is blocked, skip putting them back on the list.
+                print "-Checking edit count"
                 if getEditCount(waiter) == True:  # If edited, send them to UAA
+                        print "--Sending to be posted"
                         checkUser(waiter, False, False)
                         continue
+                print "-Readding to list"
                 if waiter in newlist:continue  # If user already in the list, in case duplicates run over
                 # Continue if none of the other checks have issues with the conditions for staying on the waitlist
                 newlist = newlist + "\n*{{User|1=" + waiter + "}}"
