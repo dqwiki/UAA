@@ -314,6 +314,7 @@ def startAllowed(override):
         else:
                 return False
 def checkWait():
+        print "Running Checkwait"
         newlist = ""  # blank variable for later
         page = masterwiki.pages[localconfig.waitlist]
         waiters = page.text()
@@ -321,6 +322,7 @@ def checkWait():
         waiters = waiters.replace("*{{User|1=", "")
         waiters = waiters.split("\n")
         for waiter in waiters:
+                print "Checking " + waiter
                 if waiter == "":continue  # Non-existant user
                 if checkRegisterTime(waiter, 7, False):continue
                 if checkBlocked(waiter):continue  # If user is blocked, skip putting them back on the list.
@@ -338,6 +340,7 @@ def checkWait():
         newlist = "<noinclude>__NOINDEX__</noinclude>" + newlist
         page.save(newlist, summary)
 def pageCleanup():
+    print "Running page cleanup"
         declinedDatabase = ["{{UAA\|w}}",
                             "{{UAA\|wt}}",
                             "{{UAA\|wait}}",
