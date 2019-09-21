@@ -322,7 +322,8 @@ def checkWait():
         waiters = waiters.replace("*{{User|1=", "")
         waiters = waiters.split("\n")
         for waiter in waiters:
-                print "Checking " + waiter
+                try:print "Checking " + waiter
+                except:print "Checking non-ASCII user"
                 if waiter == "":continue  # Non-existant user
                 if checkRegisterTime(waiter, 7, False):continue
                 if checkBlocked(waiter):continue  # If user is blocked, skip putting them back on the list.
