@@ -340,7 +340,7 @@ def checkWait():
         newlist = "<noinclude>__NOINDEX__</noinclude>" + newlist
         page.save(newlist, summary)
 def pageCleanup():
-    print "Running page cleanup"
+        print "Running page cleanup"
         declinedDatabase = ["{{UAA\|w}}",
                             "{{UAA\|wt}}",
                             "{{UAA\|wait}}",
