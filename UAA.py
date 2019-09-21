@@ -20,6 +20,7 @@ along with DeltaQuadBot. If not, see <https://www.gnu.org/licenses/agpl.txt>.
 
 #! /usr/bin/python
 import sys, localconfig, platform, time
+start_time = time.time()
 #OS Runtime comments
 if platform.system() == "Windows":
         sys.path.append(localconfig.winpath)
@@ -36,3 +37,4 @@ if not globe.startAllowed(override):
 globe.main()
 globe.checkWait()
 globe.pageCleanup()
+print("--- Time elapsed: %s seconds ---" % (time.time() - start_time))
