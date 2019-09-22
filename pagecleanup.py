@@ -35,4 +35,6 @@ if not globe.startAllowed(override):
         sys.exit(1)
         print "System Alert - Program Still running."
 globe.main()
+globe.checkWait()
+globe.pageCleanup()
 print("--- Time elapsed: %s seconds ---" % (time.time() - start_time))
