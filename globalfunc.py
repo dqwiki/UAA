@@ -50,7 +50,7 @@ if not masterwiki.logged_in:
 	masterwiki.login(login.username,login.password)
 
 # Save cookies to file, including session cookies (expirydate=0)
-print(cookie_jar)
+print(connection.cookies)
 cookie_jar.save(ignore_discard=True, ignore_expires=True)
 
 def callAPI(params):
