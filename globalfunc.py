@@ -20,7 +20,8 @@ along with DeltaQuadBot. If not, see <https://www.gnu.org/licenses/agpl.txt>.
 """
 
 from datetime import datetime
-import sys
+from http.cookiejar import MozillaCookieJar
+import sys, os, requests
 import platform
 import time
 import json
@@ -31,11 +32,23 @@ import localconfig
 import mwclient
 import login
 
+cookies_file = '/data/project/deltaquad-bots/non-admin-cookies.txt'
+
+cookie_jar = MozillaCookieJar(cookies_file)
+if os.path.exists(cookies_file):
+    # Load cookies from file, including session cookies (expirydate=0)
+    cookie_jar.load(ignore_discard=True, ignore_expires=True, expirydate=0)
+
+connection = requests.Session()
+connection.cookies = cookie_jar  # Tell Requests session to use the cookiejar.
+
 masterwiki =  mwclient.Site('en.wikipedia.org')
 print "Login status: " + str(masterwiki.logged_in)
 if not masterwiki.logged_in:
 	masterwiki.login(login.username,login.password)
 
+# Save cookies to file, including session cookies (expirydate=0)
+cookie_jar.save(ignore_discard=True, ignore_expires=True, expirydate=0)
 
 def callAPI(params):
     return masterwiki.api(**params)
