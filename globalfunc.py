@@ -18,7 +18,9 @@ GNU AFFERO GENERAL PUBLIC LICENSE for more details.
 You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
 along with DeltaQuadBot. If not, see <https://www.gnu.org/licenses/agpl.txt>.
 """
+from __future__ import print_function
 
+from builtins import str
 from datetime import datetime
 from http.cookiejar import MozillaCookieJar
 import sys, os, requests
@@ -43,7 +45,7 @@ connection = requests.Session()
 connection.cookies = cookie_jar  # Tell Requests session to use the cookiejar.
 
 masterwiki =  mwclient.Site('en.wikipedia.org')
-print "Login status: " + str(masterwiki.logged_in)
+print("Login status: " + str(masterwiki.logged_in))
 if not masterwiki.logged_in:
 	masterwiki.login(login.username,login.password)
 
@@ -172,14 +174,14 @@ def checkUser(user, waittilledit, noEdit):
         except:
                 post(user, "This bot does not support the encoding in this username or filter. Please consider reporting this to my master. Tripped on: " + bltest[1], "LOW_CONFIDENCE", False)
                 trace = traceback.format_exc()  # Traceback.
-                print trace  # Print.
+                print(trace)  # Print.
                 return
         flags = str(bltest[2])
         if searchlist(user, "wl"):
                 return
         if bltest[0]:
                 if noEdit:
-                        print 'No edit - 1' + str(bltest[1]) +" "+ str(bltest[2])
+                        print('No edit - 1' + str(bltest[1]) +" "+ str(bltest[2]))
                         return 
                 else:
                         try:return post(user, str(bltest[1]), str(bltest[2]), str(waittilledit))
@@ -191,13 +193,13 @@ def checkUser(user, waittilledit, noEdit):
         try:
                 if not slcheck[0] and not bltest[0]:
                         if noEdit:
-                                print "No edit - 2 "+str(slcheck[1]) +" "+ str(slcheck[2])
+                                print("No edit - 2 "+str(slcheck[1]) +" "+ str(slcheck[2]))
                                 return
                         return post(user, str(slcheck[1]), str(slcheck[2]), str(waittilledit))
         except:
                 if not slcheck and not bltest[0]:
                         if noEdit:
-                                print "No edit - 3"+str(slcheck[1]) +" "+ str(slcheck[2])
+                                print("No edit - 3"+str(slcheck[1]) +" "+ str(slcheck[2]))
                                 return
                         return post(user, str(slcheck[1]), str(slcheck[2]), str(waittilledit))
         return
@@ -323,13 +325,13 @@ def startAllowed(override):
         if start == "Dry run":
                 runDry()
         if start == "Dry":
-                print "Notice - Running Checkwait.py only"
+                print("Notice - Running Checkwait.py only")
                 import checkwait  # import as it's a py file
                 return False
         else:
                 return False
 def checkWait():
-        print "Running Checkwait"
+        print("Running Checkwait")
         newlist = ""  # blank variable for later
         page = masterwiki.pages[localconfig.waitlist]
         waiters = page.text()
@@ -338,19 +340,19 @@ def checkWait():
         waiters = waiters.split("\n")
         for waiter in waiters:
                 if "noinclude" in waiter:continue
-                try:print "Checking " + waiter
-                except:print "Checking non-ASCII user"
+                try:print("Checking " + waiter)
+                except:print("Checking non-ASCII user")
                 if waiter == "":continue  # Non-existant user
-                print "-Checking when registertime"
+                print("-Checking when registertime")
                 if checkRegisterTime(waiter, 7, False):continue
-                print "-Checking blocked"
+                print("-Checking blocked")
                 if checkBlocked(waiter):continue  # If user is blocked, skip putting them back on the list.
-                print "-Checking edit count"
+                print("-Checking edit count")
                 if getEditCount(waiter) == True:  # If edited, send them to UAA
-                        print "--Sending to be posted"
+                        print("--Sending to be posted")
                         checkUser(waiter, False, False)
                         continue
-                print "-Readding to list"
+                print("-Readding to list")
                 if waiter in newlist:continue  # If user already in the list, in case duplicates run over
                 # Continue if none of the other checks have issues with the conditions for staying on the waitlist
                 newlist = newlist + "\n*{{User|1=" + waiter + "}}"
@@ -362,7 +364,7 @@ def checkWait():
         newlist = "<noinclude>__NOINDEX__</noinclude>" + newlist
         page.save(newlist, summary)
 def pageCleanup():
-        print "Running page cleanup"
+        print("Running page cleanup")
         declinedDatabase = ["{{UAA\|w}}",
                             "{{UAA\|wt}}",
                             "{{UAA\|wait}}",

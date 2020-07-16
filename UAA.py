@@ -16,6 +16,7 @@ GNU AFFERO GENERAL PUBLIC LICENSE for more details.
 You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
 along with DeltaQuadBot. If not, see <https://www.gnu.org/licenses/agpl.txt>.
 """
+from __future__ import print_function
 
 
 #! /usr/bin/python
@@ -24,15 +25,15 @@ start_time = time.time()
 #OS Runtime comments
 if platform.system() == "Windows":
         sys.path.append(localconfig.winpath)
-        print "You are running DeltaQuadBot UAA Module for Windows."
+        print("You are running DeltaQuadBot UAA Module for Windows.")
 else:
         sys.path.append(localconfig.linuxpath)
-        print "You are running DeltaQuadBot UAA Module for Linux."
+        print("You are running DeltaQuadBot UAA Module for Linux.")
 import globalfunc as globe
 override = False
 if not globe.startAllowed(override):
-        print "Fatal - System Access Denied."
+        print("Fatal - System Access Denied.")
         sys.exit(1)
-        print "System Alert - Program Still running."
+        print("System Alert - Program Still running.")
 globe.main()
 print("--- Time elapsed: %s seconds ---" % (time.time() - start_time))
