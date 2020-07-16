@@ -364,88 +364,88 @@ def checkWait():
         newlist = "<noinclude>__NOINDEX__</noinclude>" + newlist
         page.save(newlist, summary)
 def pageCleanup():
-        print("Running page cleanup")
-        declinedDatabase = ["{{UAA\|w}}",
-                            "{{UAA\|wt}}",
-                            "{{UAA\|wait}}",
-                            "{{UAA\|m}}",
-                            "{{UAA\|moniter}}",
-                            "{{UAA\|mon}}",
-                            "{{UAA\|d}}",
-                            "{{UAA\|disc}}",
-                            "{{UAA\|discussing}}",
-                            "{{UAA\|dc}}",
-                            "{{UAA\|dcon}}",
-                            "{{UAA\|change}}",
-                            "{{UAA\|request}}",
-                            "{{UAA\|rc}}",
-                            "{{UAA\|rcu}}"
-                            "{{UAA\|a}}",
-                            "{{UAA\|afc}}",
-                            "{{UAA\|s}}",
-                            "{{UAA\|st}}",
-                            "{{UAA\|stale}}",
-                            "{{UAA\|rn}}",
-                            "{{UAA\|real}}",
-                            "{{UAA\|name}}",
-                            "{{UAA\|b}}",
-                            "{{UAA\|bl}}",
-                            "{{UAA\|blatant}}",
-                            "{{UAA\|no}}",
-                            "{{UAA\|not}}",
-                            "{{UAA\|e}}",
-                            "{{UAA\|eye}}",
-                            "{{UAA\|ci}}",
-                            "{{UAA\|coi}}",
-                            "{{UAA\|coin}}",
-                            "{{UAA\|r}}",
-                            "{{UAA\|rfcn}}",
-			    "{{UAA\|fp}}",
-			    "{{UAA\|false}}"
-                            ]
-        newlist = ""  # blank variable for later
-        rawnewlist = ""
-        page = masterwiki.pages[localconfig.postpage]
-        uaapage = page.text()
-        # print uaapage
-        if "{{adminbacklog" in uaapage:
-                adminbacklog = True
-                uaapage.replace("{{adminbacklog}}\n", "")
-        else:adminbacklog = False
-        uaapage = uaapage.replace("==[[Wikipedia:UAA/BOT|Bot-reported]]==\n", "")
-        usergrid = uaapage.split("*{{user-uaa|1=")
-        for cell in usergrid:
-                try:
-                        declined = False
-                        if cell == "":continue
-                        user = cell.split("}}")[0]
-                        if "{{" in user:continue  # Admin backlog template
-                        if checkBlocked(user):continue  # If user is blocked, skip putting them back on the list.
-                        if checkRegisterTime(user, 14, False):continue  # Requests over 14 days are removed for inaction
-                        if user in newlist:continue
-                        for entry in declinedDatabase:
-                                if re.search(entry.lower(), cell.lower()) == None:
-                                        continue
-                                else:
-                                        declined = True
-                                        break
-                        if declined:continue
-                        rawnewlist = rawnewlist + "\n" + user
-                        newlist = newlist + "*{{user-uaa|1=" + ''.join(cell)
-                        # print user
-                except:continue
-        # # UAA Bot page posting ##
-        summary = localconfig.editsumclear
-        page = masterwiki.pages[localconfig.postpage]
-        pagetxt = page.text()
+    print("Running page cleanup")
+    declinedDatabase = ["{{UAA\|w}}",
+                        "{{UAA\|wt}}",
+                        "{{UAA\|wait}}",
+                        "{{UAA\|m}}",
+                        "{{UAA\|moniter}}",
+                        "{{UAA\|mon}}",
+                        "{{UAA\|d}}",
+                        "{{UAA\|disc}}",
+                        "{{UAA\|discussing}}",
+                        "{{UAA\|dc}}",
+                        "{{UAA\|dcon}}",
+                        "{{UAA\|change}}",
+                        "{{UAA\|request}}",
+                        "{{UAA\|rc}}",
+                        "{{UAA\|rcu}}"
+                        "{{UAA\|a}}",
+                        "{{UAA\|afc}}",
+                        "{{UAA\|s}}",
+                        "{{UAA\|st}}",
+                        "{{UAA\|stale}}",
+                        "{{UAA\|rn}}",
+                        "{{UAA\|real}}",
+                        "{{UAA\|name}}",
+                        "{{UAA\|b}}",
+                        "{{UAA\|bl}}",
+                        "{{UAA\|blatant}}",
+                        "{{UAA\|no}}",
+                        "{{UAA\|not}}",
+                        "{{UAA\|e}}",
+                        "{{UAA\|eye}}",
+                        "{{UAA\|ci}}",
+                        "{{UAA\|coi}}",
+                        "{{UAA\|coin}}",
+                        "{{UAA\|r}}",
+                        "{{UAA\|rfcn}}",
+		    "{{UAA\|fp}}",
+		    "{{UAA\|false}}"
+                        ]
+    newlist = ""  # blank variable for later
+    rawnewlist = ""
+    page = masterwiki.pages[localconfig.postpage]
+    uaapage = page.text()
+    # print uaapage
+    if "{{adminbacklog" in uaapage:
+            adminbacklog = True
+            uaapage.replace("{{adminbacklog}}\n", "")
+    else:adminbacklog = False
+    uaapage = uaapage.replace("==[[Wikipedia:UAA/BOT|Bot-reported]]==\n", "")
+    usergrid = uaapage.split("*{{user-uaa|1=")
+    for cell in usergrid:
+            try:
+                    declined = False
+                    if cell == "":continue
+                    user = cell.split("}}")[0]
+                    if "{{" in user:continue  # Admin backlog template
+                    if checkBlocked(user):continue  # If user is blocked, skip putting them back on the list.
+                    if checkRegisterTime(user, 14, False):continue  # Requests over 14 days are removed for inaction
+                    if user in newlist:continue
+                    for entry in declinedDatabase:
+                            if re.search(entry.lower(), cell.lower()) == None:
+                                    continue
+                            else:
+                                    declined = True
+                                    break
+                    if declined:continue
+                    rawnewlist = rawnewlist + "\n" + user
+                    newlist = newlist + "*{{user-uaa|1=" + ''.join(cell)
+                    # print user
+            except:continue
+    # # UAA Bot page posting ##
+    summary = localconfig.editsumclear
+    page = masterwiki.pages[localconfig.postpage]
+    pagetxt = page.text()
     newlist = "__NOINDEX__</noinclude>\n" + "==[[Wikipedia:UAA/BOT|Bot-reported]]==\n" + newlist
     if adminbacklog:newlist = "{{adminbacklog}}<!-- v2.0.27 RemoveBlocked=Off MergeDuplicates=On AutoMark=On FixInstructions=Off AutoBacklog=On AddLimit=8 RemoveLimit=4 -->\n" + newlist
     else:newlist = "{{noadminbacklog}}<!-- v2.0.27 RemoveBlocked=Off MergeDuplicates=On AutoMark=On FixInstructions=Off AutoBacklog=On AddLimit=8 RemoveLimit=4 -->\n" + newlist
-        headerone = "<noinclude>{{pp-move-indef}}\n"
+    headerone = "<noinclude>{{pp-move-indef}}\n"
     headertwo = """{{Wikipedia:Usernames for administrator attention/Navigation}}\n{{Shortcut|WP:UAA/BOT|WP:UFAA/BOT|WP:UFA/BOT|WP:AIVU/BOT|WP:UAA/B}}\n"""
     newlist = headerone+headertwo+newlist
-        page.save(newlist, summary)
-        return
+    page.save(newlist, summary)
+    return
 global bl
 bl = getlist("bl")
 global wl
