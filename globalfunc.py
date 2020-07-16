@@ -32,7 +32,8 @@ import mwclient
 import login
 
 masterwiki =  mwclient.Site('en.wikipedia.org')
-masterwiki.login(login.username,login.password)
+if not self.logged_in:
+	masterwiki.login(login.username,login.password)
 
 
 def callAPI(params):
