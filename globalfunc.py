@@ -32,6 +32,7 @@ import mwclient
 import login
 
 masterwiki =  mwclient.Site('en.wikipedia.org')
+print "Login status: " + str(self.logged_in)
 if not self.logged_in:
 	masterwiki.login(login.username,login.password)
 
