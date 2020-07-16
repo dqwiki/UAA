@@ -39,7 +39,7 @@ cookies_file = '/data/project/deltaquad-bots/non-admin-cookies.txt'
 cookie_jar = MozillaCookieJar(cookies_file)
 if os.path.exists(cookies_file):
     # Load cookies from file, including session cookies (expirydate=0)
-    cookie_jar.load(ignore_discard=True, ignore_expires=True, expirydate=0)
+    cookie_jar.load(ignore_discard=True, ignore_expires=True)
 
 connection = requests.Session()
 connection.cookies = cookie_jar  # Tell Requests session to use the cookiejar.
