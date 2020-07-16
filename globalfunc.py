@@ -438,12 +438,12 @@ def pageCleanup():
         summary = localconfig.editsumclear
         page = masterwiki.pages[localconfig.postpage]
         pagetxt = page.text()
-	newlist = "__NOINDEX__</noinclude>\n" + "==[[Wikipedia:UAA/BOT|Bot-reported]]==\n" + newlist
-	if adminbacklog:newlist = "{{adminbacklog}}<!-- v2.0.27 RemoveBlocked=Off MergeDuplicates=On AutoMark=On FixInstructions=Off AutoBacklog=On AddLimit=8 RemoveLimit=4 -->\n" + newlist
-	else:newlist = "{{noadminbacklog}}<!-- v2.0.27 RemoveBlocked=Off MergeDuplicates=On AutoMark=On FixInstructions=Off AutoBacklog=On AddLimit=8 RemoveLimit=4 -->\n" + newlist
+    newlist = "__NOINDEX__</noinclude>\n" + "==[[Wikipedia:UAA/BOT|Bot-reported]]==\n" + newlist
+    if adminbacklog:newlist = "{{adminbacklog}}<!-- v2.0.27 RemoveBlocked=Off MergeDuplicates=On AutoMark=On FixInstructions=Off AutoBacklog=On AddLimit=8 RemoveLimit=4 -->\n" + newlist
+    else:newlist = "{{noadminbacklog}}<!-- v2.0.27 RemoveBlocked=Off MergeDuplicates=On AutoMark=On FixInstructions=Off AutoBacklog=On AddLimit=8 RemoveLimit=4 -->\n" + newlist
         headerone = "<noinclude>{{pp-move-indef}}\n"
-	headertwo = """{{Wikipedia:Usernames for administrator attention/Navigation}}\n{{Shortcut|WP:UAA/BOT|WP:UFAA/BOT|WP:UFA/BOT|WP:AIVU/BOT|WP:UAA/B}}\n"""
-	newlist = headerone+headertwo+newlist
+    headertwo = """{{Wikipedia:Usernames for administrator attention/Navigation}}\n{{Shortcut|WP:UAA/BOT|WP:UFAA/BOT|WP:UFA/BOT|WP:AIVU/BOT|WP:UAA/B}}\n"""
+    newlist = headerone+headertwo+newlist
         page.save(newlist, summary)
         return
 global bl
