@@ -40,12 +40,14 @@ cookie_jar = MozillaCookieJar(cookies_file)
 if os.path.exists(cookies_file):
     # Load cookies from file, including session cookies (expirydate=0)
     cookie_jar.load(ignore_discard=True, ignore_expires=True)
+print('We have %d cookies' % len(cookie_jar))
 
 connection = requests.Session()
 connection.cookies = cookie_jar  # Tell Requests session to use the cookiejar.
 
 masterwiki =  mwclient.Site('en.wikipedia.org')
 print("Login status: " + str(masterwiki.logged_in))
+print("Login status: " + str(masterwiki.Site.logged_in))
 if not masterwiki.logged_in:
 	masterwiki.login(login.username,login.password)
 
