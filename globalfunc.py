@@ -45,9 +45,9 @@ connection = requests.Session()
 connection.cookies = cookie_jar  # Tell Requests session to use the cookiejar.
 
 masterwiki =  mwclient.Site('en.wikipedia.org')
-print("Login status: " + str(mwclient.logged_in))
-if not mwclient.logged_in:
-	mwclient.login(login.username,login.password)
+print("Login status: " + str(masterwiki.logged_in))
+if not masterwiki.logged_in:
+	masterwiki.login(login.username,login.password)
 
 # Save cookies to file, including session cookies (expirydate=0)
 print(connection.cookies)
