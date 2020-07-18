@@ -31,7 +31,7 @@ import re
 import traceback
 
 import localconfig
-import mwclient
+from mwclient import Site
 import login
 
 cookies_file = '/data/project/deltaquad-bots/non-admin-cookies.txt'
@@ -45,9 +45,8 @@ print('We have %d cookies' % len(cookie_jar))
 connection = requests.Session()
 connection.cookies = cookie_jar  # Tell Requests session to use the cookiejar.
 
-masterwiki =  mwclient.Site('en.wikipedia.org')
+masterwiki =  Site('en.wikipedia.org')
 print("Login status: " + str(masterwiki.logged_in))
-print("Login status: " + str(masterwiki.Site.logged_in))
 if not masterwiki.logged_in:
 	masterwiki.login(login.username,login.password)
 
