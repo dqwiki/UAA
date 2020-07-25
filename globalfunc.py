@@ -45,7 +45,7 @@ print('We have %d cookies' % len(cookie_jar))
 connection = requests.Session()
 connection.cookies = cookie_jar  # Tell Requests session to use the cookiejar.
 
-masterwiki =  Site('en.wikipedia.org')
+masterwiki =  Site('en.wikipedia.org', pool=connection)
 print("Login status: ")
 print(masterwiki.logged_in)
 if not masterwiki.logged_in:
