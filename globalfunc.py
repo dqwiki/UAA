@@ -122,7 +122,8 @@ def searchlist(line, listtype):
     if listtype == "bl": #invoke blacklist
         i = 0
         for lineinbl in bl:
-            if lineinbl.lower().split(":")[0] != "":check = re.search(lineinbl.lower().split(":")[0], line.lower())
+            lineinbllower=lineinbl.lower().split(":")[0]
+            if lineinbllower != "":check = re.search(lineinbllower, line.lower())
             else: check = None
             if not (check == "None" or check == None):
                 return [True, lineinbl.split(":")[0], ' '.join(lineinbl.split(":")[1:])]
