@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 """
@@ -247,6 +248,7 @@ def runDry():
                 if user == "":continue
                 checkUser(user, True, True)
 def post(user, match, flags, restrict):
+        if user == "OutreachDashboardBot":return
         summary = "[[User:" + localconfig.botname + "|" + localconfig.botname + "]] " + localconfig.primarytaskname + " - [[User:" + user + "]] ([[Special:Block/" + user + "|Block]])"
         page = masterwiki.pages[localconfig.postpage]
         pagetxt = page.text()
