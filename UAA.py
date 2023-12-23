@@ -17,7 +17,7 @@ You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
 along with DeltaQuadBot. If not, see <https://www.gnu.org/licenses/agpl.txt>.
 """
 from __future__ import print_function
-
+import globalfunc as globe
 
 #! /usr/bin/python
 import sys, localconfig, platform, time
@@ -29,8 +29,7 @@ if platform.system() == "Windows":
 else:
         sys.path.append(localconfig.linuxpath)
         print("You are running DeltaQuadBot UAA Module for Linux.")
-import globalfunc as globe
-override = False
+override = True
 if not globe.startAllowed(override):
         print("Fatal - System Access Denied.")
         sys.exit(1)

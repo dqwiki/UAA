@@ -25,13 +25,13 @@ winpath = "C:\\pywikipedia\\core\\"#Windows path for pywikipedia, need "\\" for 
 linuxpath = "/data/project/deltaquad-bots/pywikipedia/core"
 
 #Onwiki paths
-waitlist = "User:DeltaQuad/UAA/Wait"
-gopage = "User:DeltaQuad/UAA/Run"
-timepage = "User:DeltaQuad/UAA/Time"
-settings = "User:DeltaQuad/UAA/Settings"
-blacklist = 'User:DeltaQuad/UAA/Blacklist'
-whitelist = 'User:DeltaQuad/UAA/Whitelist'
-simlist =  'User:DeltaQuad/UAA/Similar'
+waitlist = "User:AmandaNP/UAA/Wait"
+gopage = "User:AmandaNP/UAA/Run"
+timepage = "User:AmandaNP/UAA/Time"
+settings = "User:AmandaNP/UAA/Settings"
+blacklist = 'User:AmandaNP/UAA/Blacklist'
+whitelist = 'User:AmandaNP/UAA/Whitelist'
+simlist =  'User:AmandaNP/UAA/Similar'
 postpage = "Wikipedia:Usernames for administrator attention/Bot"
 holdpage = "Wikipedia:Usernames for administrator attention/Holding pen"
 

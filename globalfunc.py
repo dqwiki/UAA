@@ -185,14 +185,17 @@ def checkUser(user, waittilledit, noEdit):
                 return
         flags = str(bltest[2])
         if searchlist(user, "wl"):
+                print("User is Whitelisted " + user)
                 return
         if bltest[0]:
                 if noEdit:
                         print('No edit - 1' + str(bltest[1]) +" "+ str(bltest[2]))
                         return 
                 else:
-                        try:return post(user, str(bltest[1]), str(bltest[2]), str(waittilledit))
-                        except:return
+                        print("Posting " + user+" on UAA")
+                        #try:
+                        return post(user, str(bltest[1]), str(bltest[2]), str(waittilledit))
+                        #except:return
         if "NO_SIM_MATCH" in flags:return
         slcheck = searchlist(user, "sl")
         if slcheck == True:a = 1
@@ -202,12 +205,14 @@ def checkUser(user, waittilledit, noEdit):
                         if noEdit:
                                 print("No edit - 2 "+str(slcheck[1]) +" "+ str(slcheck[2]))
                                 return
+                        print("Posting " + user+" on UAA")
                         return post(user, str(slcheck[1]), str(slcheck[2]), str(waittilledit))
         except:
                 if not slcheck and not bltest[0]:
                         if noEdit:
                                 print("No edit - 3"+str(slcheck[1]) +" "+ str(slcheck[2]))
                                 return
+                        print("Posting " + user+" on UAA")
                         return post(user, str(slcheck[1]), str(slcheck[2]), str(waittilledit))
         return
 def main():
