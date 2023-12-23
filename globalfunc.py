@@ -35,7 +35,7 @@ import localconfig
 from mwclient import Site
 import login
 
-cookies_file = '/data/project/deltaquad-bots/non-admin-cookies.txt'
+cookies_file = localconfig.cookie
 
 cookie_jar = MozillaCookieJar(cookies_file)
 if os.path.exists(cookies_file):
