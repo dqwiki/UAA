@@ -35,6 +35,10 @@ import localconfig
 from mwclient import Site
 import login
 
+red = "\033[91m"
+yellow = "\033[93m"
+blue = "\033[94m"
+end = "\033[0m"
 cookies_file = localconfig.cookie
 
 cookie_jar = MozillaCookieJar(cookies_file)
@@ -185,7 +189,7 @@ def checkUser(user, waittilledit, noEdit):
                 return
         flags = str(bltest[2])
         if searchlist(user, "wl"):
-                print("User is Whitelisted " + user)
+                print(blue + "User is Whitelisted " + user + end)
                 return
         if bltest[0]:
                 if noEdit:
@@ -254,13 +258,13 @@ def runDry():
                 checkUser(user, True, True)
 def post(user, match, flags, restrict):
         if user == "OutreachDashboardBot":
-               print("Skipping OutreachDashboardBot")
+               print(red + "Skipping OutreachDashboardBot" + end)
                return
         summary = "[[User:" + localconfig.botname + "|" + localconfig.botname + "]] " + localconfig.primarytaskname + " - [[User:" + user + "]] ([[Special:Block/" + user + "|Block]])"
         page = masterwiki.pages[localconfig.postpage]
         pagetxt = page.text()
         if user in pagetxt:
-                print("User already on UAA")
+                print(yellow + "User already on UAA" + end)
                 return
         text = "\n\n*{{user-uaa|1=" + user + "}}\n"
         if "LOW_CONFIDENCE" in flags:
@@ -268,12 +272,12 @@ def post(user, match, flags, restrict):
         # "WAIT_TILL_EDIT" in flags and restrict != False:#If waittilledit override it not active, aka first run
         edited = getEditCount(user)
         if edited == None:
-                print("User does not exist")
+                print(red + "User does not exist"+ end)
                 return  # Skip user, probally non-existant
         if edited == False:
                 ##We no longer use this, so we can skip it
                 #waitTillEdit(user)  # Wait till edit, user has not edited
-                print("User has not edited - cancelling")
+                print(red+"User has not edited - cancelling"+end)
                 return  # leave this indented, or it will not continue to report edited users
         if "LABEL" in flags:
                 note = flags.split("LABEL(")[1].split(")")[0]
