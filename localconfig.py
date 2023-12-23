@@ -19,6 +19,7 @@ along with DeltaQuadBot. If not, see <https://www.gnu.org/licenses/agpl.txt>.
 
 ##Main Settings
 botname = "DeltaQuadBot"
+cookie = '/data/project/deltaquad-bots/non-admin-cookies.txt'
 
 ##Default System Path
 winpath = "C:\\pywikipedia\\core\\"#Windows path for pywikipedia, need "\\" for folder switch
