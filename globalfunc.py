@@ -253,11 +253,14 @@ def runDry():
                 if user == "":continue
                 checkUser(user, True, True)
 def post(user, match, flags, restrict):
-        if user == "OutreachDashboardBot":return
+        if user == "OutreachDashboardBot":
+               print("Skipping OutreachDashboardBot")
+               return
         summary = "[[User:" + localconfig.botname + "|" + localconfig.botname + "]] " + localconfig.primarytaskname + " - [[User:" + user + "]] ([[Special:Block/" + user + "|Block]])"
         page = masterwiki.pages[localconfig.postpage]
         pagetxt = page.text()
         if user in pagetxt:
+                print("User already on UAA")
                 return
         text = "\n\n*{{user-uaa|1=" + user + "}}\n"
         if "LOW_CONFIDENCE" in flags:
@@ -265,10 +268,12 @@ def post(user, match, flags, restrict):
         # "WAIT_TILL_EDIT" in flags and restrict != False:#If waittilledit override it not active, aka first run
         edited = getEditCount(user)
         if edited == None:
+                print("User does not exist")
                 return  # Skip user, probally non-existant
         if edited == False:
                 ##We no longer use this, so we can skip it
                 #waitTillEdit(user)  # Wait till edit, user has not edited
+                print("User has not edited - cancelling")
                 return  # leave this indented, or it will not continue to report edited users
         if "LABEL" in flags:
                 note = flags.split("LABEL(")[1].split(")")[0]
