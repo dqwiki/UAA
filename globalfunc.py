@@ -289,6 +289,7 @@ def post(user, match, flags, restrict):
                 note = flags.split("NOTE(")[1].split(")")[0]
                 text = text + "*:{{takenote|Note on file}} " + note + " ~~~~\n"
         if not checkBlocked(user):page.save(pagetxt + text, summary)
+        else:print(yellow + "User is blocked" + end)
 def waitTillEdit(user):
         registertime = checkRegisterTime(user, 7, True)
         if not registertime[1]:
