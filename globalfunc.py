@@ -257,6 +257,7 @@ def runDry():
                 if user == "":continue
                 checkUser(user, True, True)
 def post(user, match, flags, restrict):
+        print(blue + "Posting " + user + end)
         if user == "OutreachDashboardBot":
                print(red + "Skipping OutreachDashboardBot" + end)
                return
