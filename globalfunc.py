@@ -267,7 +267,8 @@ def post(user, match, flags, restrict):
         if edited == None:
                 return  # Skip user, probally non-existant
         if edited == False:
-                waitTillEdit(user)  # Wait till edit, user has not edited
+                ##We no longer use this, so we can skip it
+                #waitTillEdit(user)  # Wait till edit, user has not edited
                 return  # leave this indented, or it will not continue to report edited users
         if "LABEL" in flags:
                 note = flags.split("LABEL(")[1].split(")")[0]
