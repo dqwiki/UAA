@@ -33,7 +33,6 @@ import traceback
 
 import localconfig
 from mwclient import Site
-import login
 
 red = "\033[91m"
 yellow = "\033[93m"
