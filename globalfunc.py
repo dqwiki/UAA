@@ -154,7 +154,7 @@ def searchlist(line, listtype):
                                 wlcheck = searchlist(newline, "wl")
                                 if not wlcheck:
                                     if "NO_SIM_MATCH" in flags:
-					return [True, None, None]
+                                        return [True, None, None]
                                     elif "LABEL" in flags:
                                         note = flags.split("LABEL(")[1].split(")")[0]
                                         return [False, 'Used ' + everyexpr.lower() + ' instead of ' + lineinsl.split(":")[0] + ' attempting to skip filter: ' + note + '. Violating string: ' + newline, blslcheck[2]]
