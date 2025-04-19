@@ -30,6 +30,7 @@ import time
 import json
 import re
 import traceback
+import login
 
 import localconfig
 from mwclient import Site
