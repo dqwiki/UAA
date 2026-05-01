@@ -263,6 +263,9 @@ def post(user, match, flags, restrict):
         if user == "OutreachDashboardBot":
                print(red + "Skipping OutreachDashboardBot" + end)
                return
+		if "~2026-" in user:
+		       print(red + "Skipping temp account" + end)
+		       return
         summary = "[[User:" + localconfig.botname + "|" + localconfig.botname + "]] " + localconfig.primarytaskname + " - [[User:" + user + "]] ([[Special:Block/" + user + "|Block]])"
         page = masterwiki.pages[localconfig.postpage]
         pagetxt = page.text()
