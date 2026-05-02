@@ -47,10 +47,14 @@ if os.path.exists(cookies_file):
     cookie_jar.load(ignore_discard=True, ignore_expires=True)
 print('We have %d cookies' % len(cookie_jar))
 
+USER_AGENT = "DeltaQuadBot/1.0 (User:AmandaNP@enwiki) UAA/1.0"
+
 connection = requests.Session()
+connection.headers.update({'User-Agent': USER_AGENT})
 connection.cookies = cookie_jar  # Tell Requests session to use the cookiejar.
 
-masterwiki =  Site('en.wikipedia.org', pool=connection)
+masterwiki = Site('en.wikipedia.org', pool=connection)
+masterwiki.connection.headers['User-Agent'] = USER_AGENT
 print("Login status: ")
 print(masterwiki.logged_in)
 if not masterwiki.logged_in:
